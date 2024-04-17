@@ -9,11 +9,12 @@ export default async function AsteroidFeed() {
       <header>
         <h2 className="text-xl font-bold">Ближайшие подлёты астероидов</h2>
       </header>
-      <ul>
+      <ul className="flex flex-col gap-4">
         {data?.near_earth_objects[getDate()].map(asteroid => (
-          <li key={asteroid.id}>{asteroid.name}</li>
+          <li key={asteroid.id}>
+            <Asteroid asteroid={asteroid} />
+          </li>
         ))}
-        <Asteroid />
       </ul>
     </section>
   );

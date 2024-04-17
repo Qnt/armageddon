@@ -1,4 +1,4 @@
-export type Asteroid = {
+export type AsteroidData = {
   links: {
     self: string;
   };
@@ -48,7 +48,7 @@ type CloseApproachData = {
   orbiting_body: string;
 };
 
-export type AsteroidFeed = {
+export type AsteroidFeedData = {
   links: {
     next: string;
     previous: string;
