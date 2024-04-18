@@ -1,7 +1,5 @@
-import earth from '@/public/earth.jpg';
 import type { Metadata } from 'next';
 import { Inter, Passion_One } from 'next/font/google';
-import Image from 'next/image';
 
 import './globals.css';
 
