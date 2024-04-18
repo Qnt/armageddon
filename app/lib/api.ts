@@ -1,3 +1,4 @@
+import axios from 'axios';
 import 'dotenv/config';
 import { AsteroidFeedData } from './types';
 import { getDate } from './utils';
@@ -23,11 +24,11 @@ export const fetchAsteroidFeed = async () => {
 
     console.log('fetching data');
     const url = generateURL(paths.asteroids.feed, searchParams);
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data: AsteroidFeedData = await res.json();
+    const res = await axios.get(url, { family: 4 });
+    // if (!res.ok) {
+    //   throw new Error('Failed to fetch data');
+    // }
+    const data: AsteroidFeedData = await res.data;
 
     return data;
   } catch (error) {
