@@ -22,8 +22,8 @@ export const fetchAsteroidFeed = async () => {
     });
 
     console.log('fetching data');
-    const res = await fetch(generateURL(paths.asteroids.feed, searchParams));
-
+    const url = generateURL(paths.asteroids.feed, searchParams);
+    const res = await fetch(url);
     if (!res.ok) {
       throw new Error('Failed to fetch data');
     }
