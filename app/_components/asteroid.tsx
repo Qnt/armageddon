@@ -1,6 +1,6 @@
 import asteroidIcon from '@/public/asteroid_icon.png';
 import Image from 'next/image';
-import { AsteroidData } from '../lib/types';
+import { NearEarthObject } from '../lib/types';
 import { months } from '../lib/variables';
 
 const formatDate = (date: Date) => {
@@ -44,7 +44,7 @@ const formateDiameter = (diameter: number): string => {
   return `${Math.round(Number(diameter))} м`;
 };
 
-const getSizeForAsteroidIcon = (asteroid: AsteroidData): number => {
+const getSizeForAsteroidIcon = (asteroid: NearEarthObject): number => {
   const diameter = Number(
     asteroid.estimated_diameter.meters.estimated_diameter_max
   );
@@ -55,7 +55,7 @@ const getSizeForAsteroidIcon = (asteroid: AsteroidData): number => {
   return 30;
 };
 
-export default function Asteroid({ asteroid }: { asteroid: AsteroidData }) {
+export default function Asteroid({ asteroid }: { asteroid: NearEarthObject }) {
   const date = new Date(asteroid.close_approach_data[0].close_approach_date);
   const lunarDistance = Math.round(
     Number(asteroid.close_approach_data[0].miss_distance.lunar)

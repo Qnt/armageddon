@@ -1,8 +1,13 @@
 import axios from 'axios';
 import 'dotenv/config';
-import { AsteroidFeedData } from './types';
-import { getDate } from './utils';
+import { NearEarthObjectDated, NearEarthObjectsFeed } from './types';
 import { API_KEY, BASE_URL, paths } from './variables';
+
+type NearEarthObjectsFeedParams = {
+  start_date?: string;
+  end_date?: string;
+  api_key: string;
+};
 
 const generateURL = (path: string, searchParams: URLSearchParams) => {
   const url = new URL(path, BASE_URL);
@@ -10,27 +15,44 @@ const generateURL = (path: string, searchParams: URLSearchParams) => {
   return url.toString();
 };
 
-export const fetchAsteroidFeed = async () => {
+const generateSeacrhParams = (
+  searchParams: NearEarthObjectsFeedParams
+): URLSearchParams => {
+  return new URLSearchParams({
+    ...(searchParams.start_date ? { start_date: searchParams.start_date } : {}),
+    ...(searchParams.end_date ? { end_date: searchParams.end_date } : {}),
+    api_key: searchParams.api_key,
+  });
+};
+
+export const getNearEarthObjetsFeed = async (
+  startDate?: string,
+  endDate = startDate
+): Promise<NearEarthObjectDated[] | undefined> => {
   try {
     if (!API_KEY) {
       throw new Error('Invalid API key');
     }
-    const date = getDate();
-    const searchParams = new URLSearchParams({
-      start_date: date,
-      end_date: date,
+
+    const searchParams = generateSeacrhParams({
+      start_date: startDate,
+      end_date: endDate,
       api_key: API_KEY,
     });
 
-    console.log('fetching data');
     const url = generateURL(paths.asteroids.feed, searchParams);
-    const res = await axios.get(url, { family: 4 });
-    // if (!res.ok) {
-    //   throw new Error('Failed to fetch data');
-    // }
-    const data: AsteroidFeedData = await res.data;
 
-    return data;
+    const res = await axios.get(url, { family: 4 });
+
+    const data = (await res.data) as NearEarthObjectsFeed;
+    const adaptedData = Object.keys(data.near_earth_objects).flatMap(date => {
+      return data.near_earth_objects[date].map(neo => {
+        return { ...neo, date };
+      });
+    });
+    console.log(startDate);
+    console.log(adaptedData);
+    return adaptedData;
   } catch (error) {
     console.error('Error fetching data:\n', error);
   }
