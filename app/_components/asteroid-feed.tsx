@@ -6,19 +6,34 @@ import { fetchNearEarthObjetsFeed } from '../lib/actions';
 import { NearEarthObjectDated } from '../lib/types';
 import Asteroid from './asteroid';
 
+const getNextDate = (date: Date): Date => {
+  const nextDate = new Date(date);
+  nextDate.setDate(date.getDate() + 1);
+  return nextDate;
+};
+
 export default function AsteroidFeed({
   initNearEarthObjects,
+  initDate,
 }: {
   initNearEarthObjects?: NearEarthObjectDated[];
+  initDate: Date;
 }) {
-  const [nearEarthObjects, setAsteroids] = useState(initNearEarthObjects);
+  const [nearEarthObjects, setNearEarthObjects] = useState(
+    initNearEarthObjects || []
+  );
+  const [nextDate, setNextDate] = useState(getNextDate(initDate));
   const [ref, inView] = useInView();
 
   const loadMore = useCallback(async () => {
-    //TODO: pass a correct date for next data fetch
-    const newNearEarthObjects = await fetchNearEarthObjetsFeed();
-    setAsteroids(newNearEarthObjects);
-  }, []);
+    const newNearEarthObjects =
+      (await fetchNearEarthObjetsFeed(nextDate)) || [];
+    setNearEarthObjects(prevNearEarthObjects => [
+      ...prevNearEarthObjects,
+      ...newNearEarthObjects,
+    ]);
+    setNextDate(curNextDate => getNextDate(curNextDate));
+  }, [nextDate]);
 
   useEffect(() => {
     if (inView) {

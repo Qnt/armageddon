@@ -1,11 +1,12 @@
 import axios from 'axios';
 import 'dotenv/config';
 import { NearEarthObjectDated, NearEarthObjectsFeed } from './types';
+import { formatDate } from './utils';
 import { API_KEY, BASE_URL, paths } from './variables';
 
 type NearEarthObjectsFeedParams = {
-  start_date?: string;
-  end_date?: string;
+  start_date?: Date;
+  end_date?: Date;
   api_key: string;
 };
 
@@ -19,14 +20,18 @@ const generateSeacrhParams = (
   searchParams: NearEarthObjectsFeedParams
 ): URLSearchParams => {
   return new URLSearchParams({
-    ...(searchParams.start_date ? { start_date: searchParams.start_date } : {}),
-    ...(searchParams.end_date ? { end_date: searchParams.end_date } : {}),
+    ...(searchParams.start_date
+      ? { start_date: formatDate(searchParams.start_date) }
+      : {}),
+    ...(searchParams.end_date
+      ? { end_date: formatDate(searchParams.end_date) }
+      : {}),
     api_key: searchParams.api_key,
   });
 };
 
 export const getNearEarthObjetsFeed = async (
-  startDate?: string,
+  startDate?: Date,
   endDate = startDate
 ): Promise<NearEarthObjectDated[] | undefined> => {
   try {
@@ -50,8 +55,6 @@ export const getNearEarthObjetsFeed = async (
         return { ...neo, date };
       });
     });
-    console.log(startDate);
-    console.log(adaptedData);
     return adaptedData;
   } catch (error) {
     console.error('Error fetching data:\n', error);

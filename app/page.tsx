@@ -1,9 +1,8 @@
 import AsteroidFeed from './_components/asteroid-feed';
 import { fetchNearEarthObjetsFeed } from './lib/actions';
-import { getDate } from './lib/utils';
 
 export default async function Home() {
-  const date = getDate();
+  const date = new Date();
   const nearEarthObjects = await fetchNearEarthObjetsFeed(date);
   return (
     <main className="flex min-h-screen flex-col gap-4 relative p-4">
@@ -17,7 +16,7 @@ export default async function Home() {
         </div>
       </header>
       <div className="flex flex-col gap-4 justify-between pl-20">
-        <AsteroidFeed initNearEarthObjects={nearEarthObjects} date={date} />
+        <AsteroidFeed initNearEarthObjects={nearEarthObjects} initDate={date} />
 
         {/* <section className="fixed flex bottom-0 left-0 right-0 bg-neutral-900 p-4">
           <header>
