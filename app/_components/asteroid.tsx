@@ -1,6 +1,7 @@
 import asteroidIcon from '@/public/asteroid_icon.png';
+import diameterIcon from '@/public/diameter_icon.svg';
 import Image from 'next/image';
-import { NearEarthObject } from '../lib/types';
+import { NearEarthObjectDated } from '../lib/types';
 import { months } from '../lib/variables';
 
 const formatDate = (date: Date) => {
@@ -44,9 +45,11 @@ const formateDiameter = (diameter: number): string => {
   return `${Math.round(Number(diameter))} м`;
 };
 
-const getSizeForAsteroidIcon = (asteroid: NearEarthObject): number => {
+const getSizeForAsteroidIcon = (
+  nearEarthObject: NearEarthObjectDated
+): number => {
   const diameter = Number(
-    asteroid.estimated_diameter.meters.estimated_diameter_max
+    nearEarthObject.estimated_diameter.meters.estimated_diameter_max
   );
   if (diameter > 100) {
     return 40;
@@ -55,27 +58,38 @@ const getSizeForAsteroidIcon = (asteroid: NearEarthObject): number => {
   return 30;
 };
 
-export default function Asteroid({ asteroid }: { asteroid: NearEarthObject }) {
-  const date = new Date(asteroid.close_approach_data[0].close_approach_date);
+export default function NearEarthObject({
+  nearEarthObject,
+}: {
+  nearEarthObject: NearEarthObjectDated;
+}) {
+  const date = new Date(nearEarthObject.date);
   const lunarDistance = Math.round(
-    Number(asteroid.close_approach_data[0].miss_distance.lunar)
+    Number(nearEarthObject.close_approach_data[0].miss_distance.lunar)
   );
   const dateFormated = formatDate(date);
-  const formatedName = formateName(asteroid.name);
+  const formatedName = formateName(nearEarthObject.name);
   const formatedDiameter = formateDiameter(
-    Number(asteroid.estimated_diameter.meters.estimated_diameter_max)
+    Number(nearEarthObject.estimated_diameter.meters.estimated_diameter_max)
   );
-  const asteroidIconSize = getSizeForAsteroidIcon(asteroid);
+  const asteroidIconSize = getSizeForAsteroidIcon(nearEarthObject);
 
   return (
     <article className="flex flex-col gap-2 border rounded-md p-2 max-w-96">
       <header className="flex justify-between items-baseline">
         <h3 className="text-2xl font-semibold">{dateFormated}</h3>
-        {asteroid.is_potentially_hazardous_asteroid && <p>Oпасен</p>}
+        {nearEarthObject.is_potentially_hazardous_asteroid && (
+          <p className="before:content-['⚠️']">Oпасен</p>
+        )}
       </header>
-      <div className="flex gap-2 justify-between">
-        <div>
+      <div className="flex justify-between gap-2">
+        <div className="flex flex-col gap-2">
           <p>{formateLunarDistanceInfo(lunarDistance)}</p>
+          <Image
+            src={diameterIcon}
+            alt="Diameter arrow icon"
+            className="w-full"
+          />
         </div>
         <div>
           <Image
