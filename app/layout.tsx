@@ -1,3 +1,4 @@
+import earth from '@/public/earth.jpg';
 import type { Metadata } from 'next';
 import { Inter, Passion_One } from 'next/font/google';
 
@@ -24,20 +25,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const className =
+    "before:content-[''] before:fixed before:left-[-329px] before:top-[123px] before:w-[377px] before:h-[436px] before:bg-[url('../public/earth.jpg')] before:bg-no-repeat before:bg-cover";
   return (
     <html lang="ru">
-      <body className={`${passionOne.variable} ${inter.variable} font-inter`}>
-        {/* <div className="fixed h-screen w-screen -left-">
-          <Image
-            src={earth}
-            alt="Earth"
-            fill
-            sizes="100wv"
-            quality={100}
-            placeholder="blur"
-            className="object-contain"
-          />
-        </div> */}
+      <body
+        className={`${passionOne.variable} ${inter.variable} font-inter ${className}`}
+      >
         {children}
       </body>
     </html>
