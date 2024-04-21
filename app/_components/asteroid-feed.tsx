@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { fetchNearEarthObjetsFeed } from '../lib/actions';
 import { NearEarthObjectDated } from '../lib/types';
@@ -46,11 +46,16 @@ export default function AsteroidFeed({
   }, [inView]);
 
   return (
-    <section className="flex flex-col">
-      <header>
-        <h2 className="text-xl font-bold">Ближайшие подлёты астероидов</h2>
+    <section className="flex flex-col gap-6 ml-[72px] lg:ml-[362px]">
+      <header className="flex flex-col gap-2">
+        <h2 className="text-3xl font-bold">Ближайшие подлёты астероидов</h2>
+        <div className="flex gap-1">
+          <button>в километрах</button>
+          <span>|</span>
+          <button>в лунных орбитах</button>
+        </div>
       </header>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-6">
         {nearEarthObjects?.map(nearEarthObject => (
           <li key={crypto.randomUUID()}>
             <NearEarthObject nearEarthObject={nearEarthObject} />

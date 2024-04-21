@@ -55,7 +55,7 @@ const getSizeForAsteroidIcon = (
     return 40;
   }
 
-  return 30;
+  return 24;
 };
 
 export default function NearEarthObject({
@@ -75,7 +75,7 @@ export default function NearEarthObject({
   const asteroidIconSize = getSizeForAsteroidIcon(nearEarthObject);
 
   return (
-    <article className="flex flex-col gap-2 border rounded-md p-2 max-w-96">
+    <article className="flex flex-col gap-2 max-w-[340px]">
       <header className="flex justify-between items-baseline">
         <h3 className="text-2xl font-semibold">{dateFormated}</h3>
         {nearEarthObject.is_potentially_hazardous_asteroid && (
@@ -92,22 +92,17 @@ export default function NearEarthObject({
           />
         </div>
         <div>
-          <Image
-            src={asteroidIcon}
-            alt="Asteroid"
-            height={asteroidIconSize}
-            placeholder="blur"
-          />
+          <Image src={asteroidIcon} alt="Asteroid" height={asteroidIconSize} />
         </div>
         <div>
-          <p>{formatedName}</p>
-          <p>&Oslash; {formatedDiameter}</p>
+          <p className="font-bold underline">{formatedName}</p>
+          <p className="text-xs">&Oslash; {formatedDiameter}</p>
         </div>
       </div>
       <div>
         <button
           type="button"
-          className="rounded-full bg-neutral-900 py-2 px-4 uppercase cursor-pointer text-red-600"
+          className="rounded-full bg-neutral-900 py-1 px-3 uppercase cursor-pointer text-xs font-bold tracking-wider text-red-600"
         >
           Заказать
         </button>

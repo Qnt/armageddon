@@ -15,16 +15,7 @@ export default async function Home() {
           <p>Взрываем астероиды с 1998 года.</p>
         </div>
       </header>
-      <div className="flex flex-col gap-4 justify-between pl-20">
-        <AsteroidFeed initNearEarthObjects={nearEarthObjects} initDate={date} />
-
-        {/* <section className="fixed flex bottom-0 left-0 right-0 bg-neutral-900 p-4">
-          <header>
-            <h2 className="text-xl">Корзина</h2>
-            <p>2 астероида</p>
-          </header>
-        </section> */}
-      </div>
+      <AsteroidFeed initNearEarthObjects={nearEarthObjects} initDate={date} />
     </main>
   );
 }

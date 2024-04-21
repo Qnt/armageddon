@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const className =
-    "before:content-[''] before:fixed before:left-[-329px] before:top-[123px] before:w-[377px] before:h-[436px] before:bg-[url('../public/earth.jpg')] before:bg-no-repeat before:bg-cover";
+    "before:content-[''] before:fixed before:left-[-329px] before:top-[123px] before:w-[377px] lg:before:left-[-73px] before:h-[436px] before:bg-[url('../public/earth.jpg')] before:bg-no-repeat before:bg-cover";
   return (
     <html lang="ru">
       <body
