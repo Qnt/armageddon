@@ -1,4 +1,5 @@
 import AsteroidFeed from './_components/asteroid-feed';
+import Cart from './_components/cart';
 import { fetchNearEarthObjetsFeed } from './lib/actions';
 
 export default async function Home() {
@@ -16,6 +17,7 @@ export default async function Home() {
         </div>
       </header>
       <AsteroidFeed initNearEarthObjects={nearEarthObjects} initDate={date} />
+      <Cart />
     </main>
   );
 }

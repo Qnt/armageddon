@@ -1,7 +1,6 @@
-import earth from '@/public/earth.jpg';
 import type { Metadata } from 'next';
 import { Inter, Passion_One } from 'next/font/google';
-
+import { CartProvider } from './context/cart-context';
 import './globals.css';
 
 const inter = Inter({
@@ -32,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${passionOne.variable} ${inter.variable} font-inter ${className}`}
       >
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

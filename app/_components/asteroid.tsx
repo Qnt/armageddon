@@ -1,8 +1,13 @@
+'use client';
+
 import asteroidIcon from '@/public/asteroid_icon.png';
 import diameterIcon from '@/public/diameter_icon.svg';
 import Image from 'next/image';
+import { useContext, useState } from 'react';
+import { CartContext, CartDispatchContext } from '../context/cart-context';
 import { NearEarthObjectDated } from '../lib/types';
 import { months } from '../lib/variables';
+import ButtonAdd from './ui/button-add';
 
 const formatDate = (date: Date) => {
   const day = date.getDate();
@@ -63,6 +68,12 @@ export default function NearEarthObject({
 }: {
   nearEarthObject: NearEarthObjectDated;
 }) {
+  const dispatch = useContext(CartDispatchContext);
+  const cart = useContext(CartContext);
+  const [inCart, setInCart] = useState(
+    !!cart.find(item => item.id === nearEarthObject.id)
+  );
+
   const date = new Date(nearEarthObject.date);
   const lunarDistance = Math.round(
     Number(nearEarthObject.close_approach_data[0].miss_distance.lunar)
@@ -73,6 +84,17 @@ export default function NearEarthObject({
     Number(nearEarthObject.estimated_diameter.meters.estimated_diameter_max)
   );
   const asteroidIconSize = getSizeForAsteroidIcon(nearEarthObject);
+
+  const handleOnClick = () => {
+    if (dispatch) {
+      setInCart(prevInCart => !prevInCart);
+      if (inCart) {
+        dispatch({ type: 'DELETE', nearEarthObjectId: nearEarthObject.id });
+        return;
+      }
+      dispatch({ type: 'ADD', nearEarthObject });
+    }
+  };
 
   return (
     <article className="flex flex-col gap-2 max-w-[340px]">
@@ -100,12 +122,7 @@ export default function NearEarthObject({
         </div>
       </div>
       <div>
-        <button
-          type="button"
-          className="rounded-full bg-neutral-900 py-1 px-3 uppercase cursor-pointer text-xs font-bold tracking-wider text-red-600"
-        >
-          Заказать
-        </button>
+        <ButtonAdd onClick={handleOnClick} inCart={inCart} />
       </div>
     </article>
   );
