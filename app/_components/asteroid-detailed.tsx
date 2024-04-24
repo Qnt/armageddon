@@ -1,12 +1,8 @@
-'use client';
-
 import asteroidIcon from '@/public/asteroid_icon.png';
 import diameterIcon from '@/public/diameter_icon.svg';
 import Image from 'next/image';
-import Link from 'next/link';
-import { NearEarthObjectDated } from '../lib/types';
+import { getNearEarthObjeсеDetails } from '../lib/api';
 import {
-  formatDate,
   formateDiameter,
   formateLunarDistanceInfo,
   formateName,
@@ -14,18 +10,19 @@ import {
 } from '../lib/utils';
 import ButtonAdd from './ui/button-add';
 
-export default function NearEarthObject({
-  nearEarthObject,
-  sent,
+export default async function AsteroidDetailed({
+  nearEarthObjectId,
 }: {
-  nearEarthObject: NearEarthObjectDated;
-  sent?: boolean;
+  nearEarthObjectId: string;
 }) {
-  const date = new Date(nearEarthObject.date);
+  const nearEarthObject = await getNearEarthObjeсеDetails(nearEarthObjectId);
+  if (!nearEarthObject) {
+    throw new Error('oopsie');
+  }
+
   const lunarDistance = Math.round(
     Number(nearEarthObject.close_approach_data[0].miss_distance.lunar)
   );
-  const dateFormated = formatDate(date);
   const formatedName = formateName(nearEarthObject.name);
   const formatedDiameter = formateDiameter(
     Number(nearEarthObject.estimated_diameter.meters.estimated_diameter_max)
@@ -33,9 +30,9 @@ export default function NearEarthObject({
   const asteroidIconHeight = getSizeForAsteroidIcon(nearEarthObject);
 
   return (
-    <article className="flex flex-col gap-2 max-w-[340px]">
+    <article className="flex flex-col gap-2 w-[402px]">
       <header className="flex justify-between items-baseline">
-        <h3 className="text-2xl font-semibold">{dateFormated}</h3>
+        {/* <h3 className="text-2xl font-semibold">{dateFormated}</h3> */}
         {nearEarthObject.is_potentially_hazardous_asteroid && (
           <p className="before:content-['⚠️']">Oпасен</p>
         )}
@@ -57,13 +54,11 @@ export default function NearEarthObject({
           />
         </div>
         <div>
-          <Link href={`/asteroids/${nearEarthObject.id}`}>
-            <p className="font-bold underline">{formatedName}</p>
-          </Link>
+          <p className="font-bold underline">{formatedName}</p>
           <p className="text-xs">&Oslash; {formatedDiameter}</p>
         </div>
       </div>
-      {!sent && <ButtonAdd nearEarthObject={nearEarthObject} />}
+      <ButtonAdd nearEarthObject={nearEarthObject} />
     </article>
   );
 }

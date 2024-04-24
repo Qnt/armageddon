@@ -8,7 +8,7 @@ type Cart = NearEarthObjectDated[];
 const initValues: Cart = [];
 
 type CartAction = {
-  type: 'ADD' | 'DELETE';
+  type: 'ADD' | 'DELETE' | 'RESET';
   nearEarthObject?: NearEarthObjectDated;
   nearEarthObjectId?: string;
 };
@@ -42,6 +42,9 @@ const cartReducer = (cart: Cart, action: CartAction): Cart => {
           item => Number(item.id) !== Number(action.nearEarthObjectId)
         );
       }
+    }
+    case 'RESET': {
+      return initValues;
     }
     default:
       return cart;

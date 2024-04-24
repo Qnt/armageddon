@@ -4,7 +4,7 @@ export const API_KEY = process.env.API_KEY;
 export const paths = {
   asteroids: {
     feed: '/neo/rest/v1/feed',
-    lookup: '/neo/rest/v1',
+    lookup: '/neo/rest/v1/neo',
     browse: '/neo/rest/v1/browse',
   },
 };

@@ -1,14 +1,11 @@
 import axios from 'axios';
 import 'dotenv/config';
-import { NearEarthObjectDated, NearEarthObjectsFeed } from './types';
-import { formatDate } from './utils';
+import {
+  NearEarthObject,
+  NearEarthObjectDated,
+  NearEarthObjectsFeed,
+} from './types';
 import { API_KEY, BASE_URL, paths } from './variables';
-
-type NearEarthObjectsFeedParams = {
-  start_date?: Date;
-  end_date?: Date;
-  api_key: string;
-};
 
 const generateURL = (path: string, searchParams: URLSearchParams) => {
   const url = new URL(path, BASE_URL);
@@ -16,22 +13,8 @@ const generateURL = (path: string, searchParams: URLSearchParams) => {
   return url.toString();
 };
 
-const generateSeacrhParams = (
-  searchParams: NearEarthObjectsFeedParams
-): URLSearchParams => {
-  return new URLSearchParams({
-    ...(searchParams.start_date
-      ? { start_date: formatDate(searchParams.start_date) }
-      : {}),
-    ...(searchParams.end_date
-      ? { end_date: formatDate(searchParams.end_date) }
-      : {}),
-    api_key: searchParams.api_key,
-  });
-};
-
-export const getNearEarthObjetsFeed = async (
-  startDate?: Date,
+export const getNearEarthObjeсtsFeed = async (
+  startDate: Date,
   endDate = startDate
 ): Promise<NearEarthObjectDated[] | undefined> => {
   try {
@@ -39,13 +22,14 @@ export const getNearEarthObjetsFeed = async (
       throw new Error('Invalid API key');
     }
 
-    const searchParams = generateSeacrhParams({
-      start_date: startDate,
-      end_date: endDate,
-      api_key: API_KEY,
-    });
-
-    const url = generateURL(paths.asteroids.feed, searchParams);
+    const url = generateURL(
+      paths.asteroids.feed,
+      new URLSearchParams({
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0],
+        api_key: API_KEY,
+      })
+    );
 
     const res = await axios.get(url, { family: 4 });
 
@@ -56,6 +40,31 @@ export const getNearEarthObjetsFeed = async (
       });
     });
     return adaptedData;
+  } catch (error) {
+    console.error('Error fetching data:\n', error);
+  }
+};
+
+export const getNearEarthObjeсеDetails = async (
+  id: string
+): Promise<NearEarthObjectDated | undefined> => {
+  try {
+    if (!API_KEY) {
+      throw new Error('Invalid API key');
+    }
+
+    const url = generateURL(
+      `${paths.asteroids.lookup}/${id}`,
+      new URLSearchParams({
+        api_key: API_KEY,
+      })
+    );
+
+    const res = await axios.get(url, { family: 4 });
+
+    const data = (await res.data) as NearEarthObject;
+    // TODO: write cottcet closest date
+    return { ...data, date: '' };
   } catch (error) {
     console.error('Error fetching data:\n', error);
   }
