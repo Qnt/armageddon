@@ -23,6 +23,7 @@ export default function AsteroidFeed({
     initNearEarthObjects || []
   );
   const [date, setDate] = useState(initDate);
+  const [distanceUnit, setDistanceUnit] = useState<'lunar' | 'km'>('lunar');
   const [ref, inView] = useInView();
 
   const loadMore = useCallback(async () => {
@@ -50,15 +51,28 @@ export default function AsteroidFeed({
       <header className="flex flex-col gap-2">
         <h2 className="text-3xl font-bold">Ближайшие подлёты астероидов</h2>
         <div className="flex gap-1">
-          <button>в километрах</button>
+          <button
+            onClick={() => setDistanceUnit('km')}
+            className={distanceUnit === 'km' ? 'font-bold' : 'underline '}
+          >
+            в километрах
+          </button>
           <span>|</span>
-          <button>в лунных орбитах</button>
+          <button
+            onClick={() => setDistanceUnit('lunar')}
+            className={distanceUnit === 'lunar' ? 'font-bold' : 'underline'}
+          >
+            в лунных орбитах
+          </button>
         </div>
       </header>
       <ul className="flex flex-col gap-6">
         {nearEarthObjects?.map((nearEarthObject, i) => (
           <li key={`${nearEarthObject.id}_${i}`}>
-            <NearEarthObject nearEarthObject={nearEarthObject} />
+            <NearEarthObject
+              nearEarthObject={nearEarthObject}
+              distanceUnit={distanceUnit}
+            />
           </li>
         ))}
       </ul>
