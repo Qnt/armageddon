@@ -17,11 +17,11 @@ import ButtonAdd from './ui/button-add';
 export default function NearEarthObject({
   nearEarthObject,
   sent,
-  distanceUnit,
+  distanceUnit = 'km',
 }: {
   nearEarthObject: NearEarthObjectDated;
   sent?: boolean;
-  distanceUnit: 'lunar' | 'km';
+  distanceUnit?: 'lunar' | 'km';
 }) {
   const date = new Date(nearEarthObject.date);
   const dateFormated = formatDate(date);

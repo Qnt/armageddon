@@ -9,13 +9,13 @@ import { CartContext, CartDispatchContext } from '../context/cart-context';
 export default function Page() {
   const cart = useContext(CartContext);
   const dispatch = useContext(CartDispatchContext);
-  useEffect(() => {
-    return () => {
-      if (dispatch) {
-        dispatch({ type: 'RESET' });
-      }
-    };
-  }, [dispatch]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (dispatch) {
+  //       dispatch({ type: 'RESET' });
+  //     }
+  //   };
+  // }, [dispatch]);
 
   return (
     <>
