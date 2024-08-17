@@ -22,10 +22,11 @@ export default function Cart() {
                 'астероидов'
               )}`}</p>
             </div>
-            <Link href="/checkout">
-              <button className="px-2 rounded-full h-12 w-[118px] font-bold bg-red-500">
-                Отправить
-              </button>
+            <Link
+              href="/checkout"
+              className="px-2 rounded-full h-12 w-[118px] font-bold bg-red-500 flex items-center justify-center"
+            >
+              Отправить
             </Link>
           </div>
         </section>
